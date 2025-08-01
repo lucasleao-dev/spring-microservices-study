@@ -1,126 +1,109 @@
 
 
-```markdown
-# 🎓 Sistema de Gestão Escolar - Microsserviços com Spring Boot
+## 🎓 Sistema de Gestão Escolar — Microsserviços com Spring Boot
 
-Este projeto é um estudo de arquitetura de microsserviços inspirado em sistemas distribuídos modernos como o da Netflix. Foca em aplicar práticas reais de engenharia de software, com ênfase em escalabilidade, mensageria, autenticação, observabilidade e resiliência.
-
----
-
-## ✨ Tecnologias Utilizadas
-
-| Categoria           | Tecnologias                                                                 |
-|---------------------|------------------------------------------------------------------------------|
-| **Frameworks**       | Spring Boot 3.x, Spring Cloud Config, Spring Security, Spring Cloud Gateway |
-| **Mensageria**       | Apache Kafka                                                                |
-| **Descoberta de Serviços** | Spring Cloud Netflix Eureka                                                |
-| **Persistência**     | PostgreSQL, MongoDB (opcional)                                              |
-| **Autenticação**     | JWT (JSON Web Token)                                                        |
-| **Monitoramento**    | Prometheus, Grafana                                                         |
-| **CI/CD e Qualidade**| GitLab CI/CD, SonarQube                                                     |
-| **Orquestração**     | Docker, Kubernetes                                                          |
+> Este projeto é um estudo sobre arquitetura de microsserviços utilizando Spring Boot e ferramentas modernas. Ele simula um sistema de gestão escolar, abordando autenticação, controle de usuários, matrículas, lançamentos de notas e envio de notificações.
 
 ---
 
-## 🔧 Funcionalidades por Serviço
+### ✅ Funcionalidades
 
-| Serviço               | Responsabilidades                                                                 |
-|-----------------------|-----------------------------------------------------------------------------------|
-| `user-service`        | Gestão de usuários (Admin, Aluno, Professor) e autenticação via JWT              |
-| `student-service`     | Cadastro e consulta de alunos                                                     |
-| `course-service`      | Gerenciamento de cursos, disciplinas e professores                                |
-| `enrollment-service`  | Matrícula de alunos em disciplinas, controle de pré-requisitos                    |
-| `grade-service`       | Lançamento e consulta de notas, geração de boletins                               |
-| `notification-service`| Envio de notificações (ex: notas lançadas, matrícula confirmada) via Kafka       |
-| `api-gateway`         | Roteamento centralizado e autenticação                                            |
-| `config-server`       | Centralização de configurações dos microsserviços                                 |
-| `eureka-server`       | Registro e descoberta de serviços                                                 |
-| `logging-service`     | Coleta de logs (opcional para observabilidade avançada)                           |
+| Serviço                  | Responsabilidade                                                    |
+| ------------------------ | ------------------------------------------------------------------- |
+| **User Service**         | Gestão de usuários (aluno, professor, admin) e autenticação via JWT |
+| **Course Service**       | Cadastro e gerenciamento de cursos e disciplinas                    |
+| **Enrollment Service**   | Matrícula de alunos em disciplinas                                  |
+| **Grade Service**        | Lançamento e consulta de notas                                      |
+| **Notification Service** | Envio de notificações (e-mail, push) em eventos importantes         |
+| **API Gateway**          | Roteamento de requisições e autenticação centralizada               |
+| **Logging Service**      | Coleta e centralização de logs para análise e rastreabilidade       |
 
 ---
 
-## 🧱 Estrutura do Projeto
+### 🛠️ Tecnologias Usadas
+
+* **Spring Boot 3.x**
+* **Spring Cloud Netflix Eureka** – Descoberta de serviços
+* **Spring Cloud Config** – Configuração centralizada
+* **Kafka** – Mensageria e eventos entre serviços
+* **Spring Security + JWT** – Autenticação e autorização
+* **Spring Data JPA** – Persistência com PostgreSQL
+* **Prometheus** – Coleta de métricas
+* **Grafana** – Visualização de métricas
+* **Docker + Docker Compose** – Containerização
+* **Kubernetes (K8s)** – Orquestração de containers (futuramente)
+* **GitLab CI/CD** – Integração e entrega contínua
+* **SonarQube** – Análise de qualidade de código
+
+---
+
+### 📦 Estrutura dos Microsserviços
 
 ```
-
 school-system/
-├── api-gateway/
-├── config-server/
-├── eureka-server/
-├── user-service/
-├── student-service/
-├── course-service/
-├── enrollment-service/
-├── grade-service/
-├── notification-service/
-├── logging-service/ (opcional)
-├── docker-compose.yml
+│
+├── user-service/             → Autenticação e usuários
+├── course-service/           → Cursos e disciplinas
+├── enrollment-service/       → Matrículas
+├── grade-service/            → Lançamento de notas
+├── notification-service/     → Notificações (Kafka listener)
+├── logging-service/          → Coleta de logs
+├── api-gateway/              → Roteamento + segurança JWT
+├── config-server/            → Spring Cloud Config
+├── discovery-server/         → Eureka Server
+├── docker-compose.yml        → Infraestrutura local
 └── README.md
-
-````
+```
 
 ---
 
-## 🚀 Como Rodar o Projeto
+### ▶️ Como Rodar o Projeto
 
-### ✅ Pré-requisitos
+#### ✅ Pré-requisitos
 
-- Java 17+
-- Docker e Docker Compose
-- Git
-- Kafka (já incluso no `docker-compose.yml`)
-- PostgreSQL (já incluso)
+* **JDK 17+**
+* **Docker** e **Docker Compose**
+* **Kafka** rodando (via Docker)
+* **Banco de dados PostgreSQL** (via Docker)
 
-### 🧪 Subir infraestrutura com Docker
+#### 📌 Passos básicos
 
 ```bash
+# 1. Clonar o repositório
+git clone https://github.com/seu-usuario/school-system.git
+cd school-system
+
+# 2. Subir infraestrutura com Docker
 docker-compose up -d
-````
 
-### 🌐 Acessos Padrão
-
-* Eureka Dashboard: `http://localhost:8761`
-* Config Server: `http://localhost:8888`
-* API Gateway: `http://localhost:8080`
-* Kafka UI (se usar): `http://localhost:9000`
-* Grafana: `http://localhost:3000` (admin/admin)
-* Prometheus: `http://localhost:9090`
+# 3. Rodar serviços localmente (via IDE ou Maven)
+./mvnw spring-boot:run -pl user-service
+```
 
 ---
 
-## 📊 Monitoramento e Observabilidade
+### 📈 Observabilidade
 
-* Métricas expostas via Actuator + Prometheus
-* Dashboards customizados no Grafana
-* Possível integração futura com Zipkin ou Jaeger (tracing distribuído)
-
----
-
-## 🧪 Testes Automatizados
-
-* JUnit 5 para testes unitários e de integração
-* Testcontainers (para simular Kafka e bancos em CI)
-* Testes de contrato com Spring Cloud Contract (planejado)
+* Métricas expostas via **Actuator + Prometheus**
+* Painéis configurados no **Grafana**
+* Logs coletados via **Logging Service** com armazenamento centralizado
 
 ---
 
-## 🧭 Roadmap de Evolução
+### 🔐 Segurança
 
-| Fase                       | Conteúdo                                                         |
-| -------------------------- | ---------------------------------------------------------------- |
-| **Fase 1 (intermediária)** | Serviços principais, JWT, Kafka, Eureka, Config Server, Docker   |
-| **Fase 2 (avançada)**      | Resilience4j, Circuit Breakers, Sagas, observabilidade completa  |
-| **Fase 3 (expert)**        | Kubernetes, Helm, deploy automático, testes com contract testing |
+* Autenticação com **JWT** gerado pelo `user-service`
+* Autorização por **roles**: `ADMIN`, `ALUNO`, `PROFESSOR`
+* Proteção das rotas via API Gateway
 
 ---
 
-## 🧠 Inspiração Arquitetural
+### ✅ TODO (próximas implementações)
 
-Este projeto foi fortemente inspirado em arquiteturas de empresas como a **Netflix**, utilizando componentes como:
+* [ ] Testes unitários e de integração com cobertura SonarQube
+* [ ] Orquestração com Kubernetes
+* [ ] Dashboards de métricas prontos no Grafana
+* [ ] Upload de documentos escolares (ex: boletim em PDF)
+* [ ] Frontend em Angular/React (opcional)
 
-* Spring Boot + Zuul/API Gateway
-* Kafka para eventos
-* Eureka para service discovery
-* Config Server para configuração centralizada
-* Prometheus + Grafana para monitoramento
-* Docker e Kubernetes para orquestração
+---
